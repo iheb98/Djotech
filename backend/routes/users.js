@@ -1,38 +1,35 @@
 const express = require('express');
 const User = require('../models/User.js');
-const Produit = require('../models/Produit.js');
+const Product = require('../models/Product.js');
 const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const config = require('../config/database');
 const ROLES = require('../models/roles.js');
 //Register
 router.post('/register', (req, res) => {
     const user = new User({
-        nom: req.body.nom,
-        prenom: req.body.prenom,
+        lastName: req.body.lastName,
+        firstName: req.body.firstName,
         email: req.body.email,
         login: req.body.login,
-        numTel: req.body.numTel,
-        motDePasse: req.body.motDePasse,
-        rue: req.body.rue,
-        ville: req.body.ville,
-        codePostal: req.body.codePostal,
-        role: req.body.role ? req.body.role : 'Client'
+        phone: req.body.phone,
+        password: req.body.password,
+        address: req.body.address,
+        role: req.body.role ? req.body.role : 'Owner'
     });
 
     bcrypt.genSalt(10, (err, salt) => {
         console.log(user);
 
         if (err) res.json(err);
-        bcrypt.hash(user.motDePasse, salt, (err, hash) => {
+        bcrypt.hash(user.password, salt, (err, hash) => {
 
             if (err) res.json(err);
-            user.motDePasse = hash;
+            user.password = hash;
             user.save()
                 .then(data => {
-                    res.json({ status: 200, msg: "Utilisateur ajouté", result: { nom: data.nom } });
+                    res.json({ status: 200, msg: "Utilisateur ajouté", result: { lastName: data.lastName } });
                 })
                 .catch(err => {
                     res.json(err);
@@ -65,7 +62,7 @@ router.post('/verifierlogin', (req, res) => {
 
 router.post('/authenticate', (req, res, next) => {
     const login = req.body.login;
-    const password = req.body.motDePasse;
+    const password = req.body.password;
     console.log(login);
 
     User.findOne({ login: login }, (err, user) => {
@@ -73,13 +70,14 @@ router.post('/authenticate', (req, res, next) => {
             return res.json({ success: false, message: "User not found" });
 
         }
-        console.log(JSON.stringify(req.body) + " / " + user.motDePasse);
+        console.log(JSON.stringify(req.body) + " / " + user.password);
 
 
-        User.comparePassword(password, user.motDePasse, (err, isMatch) => {
+        User.comparePassword(password, user.password, (err, isMatch) => {
             if (err) res.json(err);
             if (isMatch) {
-                const token = jwt.sign(user.toJSON(), config.secret, {
+                user.password=undefined;
+                const token = jwt.sign(user.toJSON(), process.env.SECRET, {
                     expiresIn: 7200 // 2h
                 });
 
@@ -87,22 +85,7 @@ router.post('/authenticate', (req, res, next) => {
                 // **************************************** LOCAL STORAGE **********************************
                 res.json({
                     success: true,
-                    token: 'JWT ' + token,
-                    user: {
-                        id: user._id,
-                        nom: user.nom,
-                        prenom: user.prenom,
-                        email: user.email,
-                        login: user.login,
-                        numTel: user.numTel,
-                        adresse: user.adresse,
-                        image: user.image,
-                        idPanier: user.idPanier,
-                        codePostal: user.codePostal,
-                        rue: user.rue,
-                        ville: user.ville,
-                        role: user.role
-                    }
+                    token: 'JWT ' + token
                 })
                 //********************************************************
             } else {
@@ -130,7 +113,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', (req, res) => {
     User.findById(req.params.id, (err, user) => {
-        user.motDePasse = "";
+        user.password = "";
         res.json(user);
     });
 });
@@ -138,11 +121,11 @@ router.get('/:id', (req, res) => {
 router.put('/updateImage', async (req, res) => {
     User.findById(req.body.id, async (err, user) => {
         user.image = req.body.image;
-        await Produit.find({ idUser: req.body.id }).then(
-            async produits => {
-                for (let produit of produits) {
-                    produit.imageUser = req.body.image;
-                    await produit.save().then().catch();
+        await Product.find({ idUser: req.body.id }).then(
+            async products => {
+                for (let product of products) {
+                    product.imageUser = req.body.image;
+                    await product.save().then().catch();
                 }
             }
         )
@@ -167,15 +150,13 @@ router.put('/updateImage', async (req, res) => {
 router.put('/:id', (req, res) => {
     User.findById(req.params.id, (err, user) => {
 
-        user.nom = req.body.nom;
-        user.prenom = req.body.prenom;
-        user.ville = req.body.ville;
-        user.rue = req.body.rue;
-        user.codePostal = req.body.codePostal;
-        user.numTel = req.body.numTel;
+        user.lastName = req.body.lastName;
+        user.firstName = req.body.firstName;
+        user.address = req.body.address;
+        user.phone = req.body.phone;
         user.login = req.body.login;
         user.email = req.body.email;
-        user.motDePasse = req.body.motDePasse ? req.body.motDePasse : user.motDePasse;
+        user.password = req.body.password ? req.body.password : user.password;
 
         user.save().then(data => {
             res.json({ message: "Updated successfully!", status: 200 })
@@ -187,16 +168,16 @@ router.put('/:id', (req, res) => {
 
 router.put('/mdp/:id', (req, res) => {
     User.findById(req.params.id, (err, user) => {
-        User.comparePassword(req.body.ancienneMdp, user.motDePasse, (err, isMatch) => {
+        User.comparePassword(req.body.ancienneMdp, user.password, (err, isMatch) => {
             if (err) res.json(err);
             if (isMatch) {
 
-                user.motDePasse = req.body.nouvelleMdp;
+                user.password = req.body.nouvelleMdp;
                 bcrypt.genSalt(10, (err, salt) => {
                     if (err) res.json(err);
-                    bcrypt.hash(user.motDePasse, salt, (err, hash) => {
+                    bcrypt.hash(user.password, salt, (err, hash) => {
                         if (err) res.json(err);
-                        user.motDePasse = hash;
+                        user.password = hash;
                         user.save().then(data => {
                             res.json({ message: "Mot de passe modifié !" })
                         }).catch(err => {

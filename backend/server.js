@@ -54,11 +54,13 @@ app.post('/file-upload/:login', upload.single('image'), function (req, res) {
 
 
 app.use(bodyparser.json());
-const produitsRoute= require('./routes/produits');
+const productsRoute= require('./routes/products');
+const usersRoute= require('./routes/users');
 
 
 
-app.use('/produits',produitsRoute)
+app.use('/products',productsRoute)
+app.use('/users',usersRoute)
  
 mongoose.connect(process.env.DB_CONNECTION,
 {useNewUrlParser: true, useUnifiedTopology: true},

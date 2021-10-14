@@ -1,11 +1,11 @@
 const express = require('express');
-const Produit = require('../models/Produit');
+const Product = require('../models/Product');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
-        const produits = await Produit.find();
-        res.json(produits);
+        const products = await Product.find();
+        res.json(products);
     } catch (err) {
         res.json({ message: err });
     }

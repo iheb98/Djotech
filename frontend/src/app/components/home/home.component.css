@@ -1,0 +1,24 @@
+.menu-item{
+    text-align: center;
+    cursor: pointer;
+    padding:100px;
+    color:white;
+    font-size: 40px;
+    background-color: #189ad3;
+    border-radius: 20px;
+    box-shadow: 10px 10px 30px  2px gray;
+}
+
+.menu-item:hover{
+    background-color: #1582b1;
+    box-shadow: 10px 10px 30px  10px gray;
+
+
+}
+
+.menu-item:active{
+    background-color: #167097;
+    box-shadow: 10px 10px 30px  16px gray;
+
+
+}
