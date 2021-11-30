@@ -16,6 +16,9 @@ const ProductSchema = mongoose.Schema({
     price: {
         type: Number
     },
+    sellingPrice:{
+        type:Number
+    },
     quantity: {
         type: Number
     },
@@ -31,6 +34,9 @@ const ProductSchema = mongoose.Schema({
     },
     category: {
         type: String
+    },
+    provider:{
+        type:String
     }
 });
 

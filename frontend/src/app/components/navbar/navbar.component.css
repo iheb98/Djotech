@@ -1,6 +1,7 @@
 #icon, .logo {
     width:60px;
     height:60px;
+    margin-left:20px;
   }
   
 .power-icon{
@@ -9,4 +10,17 @@
     margin-right:20px;
     margin-left:50px;
     cursor: pointer;
+}
+
+.arrow{
+  margin-right:30px;
+  margin-left:30px;
+  width:40px;
+  height:40px;
+  cursor: pointer;
+
+}
+
+.title{
+  width: 50%;
 }

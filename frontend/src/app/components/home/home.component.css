@@ -1,9 +1,17 @@
+.menu-item-container{
+    padding:30px;
+}
 .menu-item{
     text-align: center;
+    vertical-align:middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
     cursor: pointer;
-    padding:100px;
+    padding:120px;
+    height:100%;
     color:white;
-    font-size: 40px;
+    font-size: 30px;
     background-color: #189ad3;
     border-radius: 20px;
     box-shadow: 10px 10px 30px  2px gray;
@@ -22,3 +30,4 @@
 
 
 }
+

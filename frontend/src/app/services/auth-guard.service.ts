@@ -29,7 +29,7 @@ export class AuthGuardService implements CanActivate {
       !hasRole
     ) {
       if (!this.auth.loggedIn()) {
-        this.router.navigate(['connexion']);
+        this.router.navigate(['login']);
       }
 
       return false;

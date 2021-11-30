@@ -37,7 +37,7 @@ let upload = multer({
   storage: storage
 });
 
-app.post('/file-upload/:login', upload.single('image'), function (req, res) {
+app.post('/file-upload', upload.single('image'), function (req, res) {
     if (!req.file) {
       console.log("No file is available!");
       return res.send({
@@ -55,11 +55,17 @@ app.post('/file-upload/:login', upload.single('image'), function (req, res) {
 
 app.use(bodyparser.json());
 const productsRoute= require('./routes/products');
+const categoriesRoute= require('./routes/categories');
+const colorsRoute= require('./routes/colors');
+const providersRoute= require('./routes/providers');
 const usersRoute= require('./routes/users');
 
 
 
 app.use('/products',productsRoute)
+app.use('/colors',colorsRoute)
+app.use('/categories',categoriesRoute)
+app.use('/providers',providersRoute)
 app.use('/users',usersRoute)
  
 mongoose.connect(process.env.DB_CONNECTION,
@@ -67,6 +73,7 @@ mongoose.connect(process.env.DB_CONNECTION,
 ()=>{
     console.log('connected to Database');
 });
+
 require('./config/passport')(passport);
 
 app.listen(3000);

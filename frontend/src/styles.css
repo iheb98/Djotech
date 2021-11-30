@@ -1,5 +1,6 @@
 
 /* BASIC */
+@import "~@ng-select/ng-select/themes/default.theme.css";
 
 html {
    /* background-color: #c3dfec;*/
@@ -9,9 +10,10 @@ html {
     font-family: "Jazz LET", sans-serif;
     
     height: 100vh;
-    background-image: linear-gradient(rgb(147, 190, 245), rgb(255, 255, 255));
-
+    padding-bottom: 56px;;
+    margin-bottom:56px;
   }
+
   
   a {
     color: #92badd;
@@ -27,7 +29,6 @@ html {
     text-transform: uppercase;
     display:inline-block;
     margin: 40px 8px 10px 8px; 
-    color: #cccccc;
   }
   
   
@@ -265,6 +266,10 @@ html {
     height:100px;
     margin:40px;
   }
+
+  fa-icon{
+    cursor: pointer;
+    }
   
   footer{
     position: fixed;
@@ -272,3 +277,24 @@ html {
     left: 0px;
     right: 0px;
   }
+
+  .custom-btn-primary{
+    color: white;
+    background-color: rgb(24,118,189);
+    margin-right:10px;
+    margin-left:10px;
+    padding:10px;
+  }
+
+  .custom-btn-secondary{
+    color: rgb(24,118,189);;
+    background-color: white;
+    border-color: rgb(24,118,189);;
+    border-width: 2px;
+    margin-right:10px;
+    margin-left:10px;
+    padding:10px;
+
+  }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
