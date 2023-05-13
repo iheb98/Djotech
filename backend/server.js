@@ -12,7 +12,7 @@ const passport = require('passport');
 require('dotenv/config');
 
 var corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: 'https://djotech.onrender.com',
     optionsSuccessStatus: 200 
 }
 
